@@ -7,20 +7,45 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.finanzapp.ui.fragments.DashboardFragment"
-        android:label="Resumen" />
+        android:label="Resumen">
+
+        <action
+            android:id="@+id/action_dashboardFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/transactionsFragment"
         android:name="com.finanzapp.ui.fragments.TransactionsFragment"
-        android:label="Transacciones" />
+        android:label="Transacciones">
+
+        <action
+            android:id="@+id/action_transactionsFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/savingsFragment"
         android:name="com.finanzapp.ui.fragments.SavingsFragment"
-        android:label="Ahorros" />
+        android:label="Ahorros">
+
+        <action
+            android:id="@+id/action_savingsFragment_to_addSavingGoalFragment"
+            app:destination="@id/addSavingGoalFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/statsFragment"
         android:name="com.finanzapp.ui.fragments.StatsFragment"
         android:label="Estadísticas" />
+
+    <fragment
+        android:id="@+id/addTransactionFragment"
+        android:name="com.finanzapp.ui.fragments.AddTransactionFragment"
+        android:label="Añadir Transacción" />
+
+    <fragment
+        android:id="@+id/addSavingGoalFragment"
+        android:name="com.finanzapp.ui.fragments.AddSavingGoalFragment"
+        android:label="Nueva Meta de Ahorro" />
 </navigation>
