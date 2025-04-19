@@ -40,6 +40,22 @@
         android:label="Estadísticas" />
 
     <fragment
+        android:id="@+id/budgetsFragment"
+        android:name="com.finanzapp.ui.fragments.BudgetsFragment"
+        android:label="Presupuestos">
+
+        <!-- Acción que faltaba y causaba el primer error -->
+        <action
+            android:id="@+id/action_budgetsFragment_to_premiumFragment"
+            app:destination="@id/premiumFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/premiumFragment"
+        android:name="com.finanzapp.ui.fragments.PremiumFragment"
+        android:label="Premium" />
+
+    <fragment
         android:id="@+id/addTransactionFragment"
         android:name="com.finanzapp.ui.fragments.AddTransactionFragment"
         android:label="Añadir Transacción" />

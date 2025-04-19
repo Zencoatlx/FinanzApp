@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.finanzapp"
-        minSdk = 24
+        minSdk = 26  // Ya actualizado para compatibilidad con MethodHandle
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -36,7 +36,10 @@ android {
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
+
+    // 💫 ESTA ES LA LÍNEA CRÍTICA - Actualiza Material Components
     implementation("com.google.android.material:material:1.10.0")
+
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // Navegación entre pantallas
@@ -57,4 +60,7 @@ dependencies {
 
     // Corrutinas de Kotlin
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+
+    // Facturación de Google Play
+    implementation("com.android.billingclient:billing-ktx:6.0.1")
 }

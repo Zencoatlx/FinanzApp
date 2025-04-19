@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FinanzApp Premium"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Desbloquea todas las funciones premium para llevar tus finanzas al siguiente nivel"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+
+    <ImageView
+        android:id="@+id/imagePremium"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/ic_stats"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDescription"
+        app:tint="@color/purple_500" />
+
+    <TextView
+        android:id="@+id/textBenefits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Con FinanzApp Premium obtienes:\n• Exportación ilimitada a Excel\n• Gráficos avanzados\n• Presupuestos personalizados\n• Análisis de categorías\n• Sin publicidad"
+        app:layout_constraintTop_toBottomOf="@+id/imagePremium" />
+
+    <TextView
+        android:id="@+id/textTrialInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Disfruta de tu período de prueba gratuito de 14 días"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/textBenefits" />
+
+    <Button
+        android:id="@+id/buttonSubscribeMonthly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Suscripción Mensual - $2.99/mes"
+        app:layout_constraintTop_toBottomOf="@+id/textTrialInfo" />
+
+    <Button
+        android:id="@+id/buttonSubscribeYearly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Suscripción Anual - $24.99/año"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSubscribeMonthly" />
+
+    <Button
+        android:id="@+id/buttonSubscribeLifetime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Compra Vitalicia - $59.99"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSubscribeYearly" />
+
+    <Button
+        android:id="@+id/buttonRestorePurchases"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Restaurar Compras"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSubscribeLifetime" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="No, gracias"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonRestorePurchases" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

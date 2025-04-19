@@ -7,4 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Añadimos esta referencia que falta -->
+    <color name="design_default_color_primary">#FF6200EE</color>
 </resources>

@@ -14,9 +14,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.finanzapp.R
 import com.finanzapp.data.entity.Transaction
 import com.finanzapp.ui.viewmodel.TransactionViewModel
+import com.finanzapp.util.ExportManager
+import com.finanzapp.util.PremiumManager
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
@@ -28,6 +31,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.NumberFormat
 import java.util.Calendar
 import java.util.Date
@@ -36,6 +40,8 @@ import java.util.Locale
 class StatsFragment : Fragment() {
 
     private lateinit var viewModel: TransactionViewModel
+    private lateinit var premiumManager: PremiumManager
+    private lateinit var exportManager: ExportManager
     private lateinit var barChart: BarChart
     private lateinit var pieChart: PieChart
     private lateinit var textTotalIncome: TextView
@@ -59,6 +65,12 @@ class StatsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(requireActivity())[TransactionViewModel::class.java]
+
+        // Inicializar Premium Manager
+        premiumManager = PremiumManager(requireContext())
+
+        // Inicializar Export Manager
+        exportManager = ExportManager(requireContext())
 
         // Inicializar vistas
         barChart = view.findViewById(R.id.barChartIncomeExpense)
@@ -88,8 +100,14 @@ class StatsFragment : Fragment() {
 
         // Configurar botón de exportar
         buttonExport.setOnClickListener {
-            Toast.makeText(requireContext(), "Exportando estadísticas...", Toast.LENGTH_SHORT).show()
-            // TODO: Implementar exportación a PDF/Excel
+            // Verificar si es usuario premium para exportar
+            premiumManager.isPremium.observe(viewLifecycleOwner) { isPremium ->
+                if (isPremium) {
+                    exportData()
+                } else {
+                    showPremiumDialog("Exportar a Excel")
+                }
+            }
         }
 
         // Configurar gráficos
@@ -98,6 +116,45 @@ class StatsFragment : Fragment() {
 
         // Cargar datos
         loadData()
+
+        // Observar cambios en premium para habilitar/deshabilitar botones
+        premiumManager.isPremium.observe(viewLifecycleOwner) { isPremium ->
+            buttonExport.isEnabled = isPremium
+            if (!isPremium) {
+                buttonExport.text = "Exportar (Premium)"
+            } else {
+                buttonExport.text = "Exportar a Excel"
+            }
+        }
+    }
+
+    private fun showPremiumDialog(feature: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Función Premium")
+            .setMessage("La función '$feature' está disponible solo para usuarios premium. ¿Deseas actualizar ahora?")
+            .setPositiveButton("Ver opciones Premium") { _, _ ->
+                findNavController().navigate(R.id.action_statsFragment_to_premiumFragment)
+            }
+            .setNegativeButton("Más tarde", null)
+            .show()
+    }
+
+    private fun exportData() {
+        val dateRange = getDateRange(currentTimeRange)
+        viewModel.getTransactionsByDateRange(dateRange.first, dateRange.second)
+            .observe(viewLifecycleOwner) { transactions ->
+                if (transactions.isEmpty()) {
+                    Toast.makeText(requireContext(), "No hay datos para exportar", Toast.LENGTH_SHORT).show()
+                    return@observe
+                }
+
+                if (exportManager.exportTransactionsToExcel(transactions)) {
+                    Toast.makeText(requireContext(), "Archivo Excel generado con éxito", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(requireContext(), "Error al exportar datos", Toast.LENGTH_SHORT).show()
+                    showPremiumDialog("Exportar a Excel")
+                }
+            }
     }
 
     private fun setupBarChart() {

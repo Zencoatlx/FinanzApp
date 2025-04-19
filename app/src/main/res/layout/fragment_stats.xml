@@ -213,13 +213,63 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/buttonExport"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Exportar estadísticas" />
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/buttonExport"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableStart="@drawable/ic_export"
+                        android:drawablePadding="8dp"
+                        android:text="Exportar estadísticas (Premium)"
+                        android:textAllCaps="false" />
+
+                    <Button
+                        android:id="@+id/buttonUpgradeToPremium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:drawableStart="@drawable/ic_premium"
+                        android:drawablePadding="4dp"
+                        android:text="Premium"
+                        android:textAllCaps="false" />
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <!-- Banner de anuncio (solo versión gratuita) -->
+        <LinearLayout
+            android:id="@+id/bannerAdContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#F0F0F0"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardKeyStats">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Actualiza a Premium para eliminar anuncios y desbloquear todas las funciones"
+                android:textAlignment="center"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ESPACIO PARA ANUNCIO"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

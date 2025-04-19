@@ -13,6 +13,10 @@
         android:icon="@drawable/ic_savings"
         android:title="Ahorros" />
     <item
+        android:id="@+id/budgetsFragment"
+        android:icon="@drawable/ic_stats"
+        android:title="Presupuestos" />
+    <item
         android:id="@+id/statsFragment"
         android:icon="@drawable/ic_stats"
         android:title="Estadísticas" />

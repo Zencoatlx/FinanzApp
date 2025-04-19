@@ -6,14 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.finanzapp.data.converters.Converters
+import com.finanzapp.data.dao.BudgetDao
+import com.finanzapp.data.dao.CategoryDao
 import com.finanzapp.data.dao.SavingGoalDao
 import com.finanzapp.data.dao.TransactionDao
+import com.finanzapp.data.entity.Budget
 import com.finanzapp.data.entity.Category
 import com.finanzapp.data.entity.SavingGoal
 import com.finanzapp.data.entity.Transaction
 
 @Database(
-    entities = [Transaction::class, SavingGoal::class, Category::class],
+    entities = [Transaction::class, SavingGoal::class, Category::class, Budget::class],
     version = 1,
     exportSchema = false
 )
@@ -21,6 +24,8 @@ import com.finanzapp.data.entity.Transaction
 abstract class AppDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
     abstract fun savingGoalDao(): SavingGoalDao
+    abstract fun categoryDao(): CategoryDao
+    abstract fun budgetDao(): BudgetDao
 
     companion object {
         @Volatile
@@ -33,8 +38,8 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "finanzapp_database"
                 )
-                .fallbackToDestructiveMigration()
-                .build()
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }
