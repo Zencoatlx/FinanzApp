@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp"
+    android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,24 +16,14 @@
             android:id="@+id/textBudgetName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:text="Comida"
             android:textColor="@android:color/black"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/textBudgetAmount"
+            app:layout_constraintEnd_toStartOf="@+id/textBudgetPercentage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textBudgetPeriod"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Abril 2025"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textBudgetName" />
 
         <ProgressBar
             android:id="@+id/progressBudget"
@@ -42,29 +31,30 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:progress="35"
+            android:layout_marginEnd="8dp"
+            android:progress="75"
             android:progressTint="@color/design_default_color_primary"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/textBudgetPercentage"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textBudgetPeriod" />
+            app:layout_constraintTop_toBottomOf="@+id/textBudgetName" />
 
         <TextView
             android:id="@+id/textBudgetProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="$3,500 / $10,000"
+            android:text="$7,500 / $10,000"
             android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/progressBudget" />
 
         <TextView
-            android:id="@+id/textBudgetAmount"
+            android:id="@+id/textBudgetPercentage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="35%"
-            android:textColor="@color/design_default_color_primary"
+            android:text="75%"
+            android:textColor="@android:color/holo_orange_dark"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -66,8 +66,8 @@ class StatsFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity())[TransactionViewModel::class.java]
 
-        // Inicializar Premium Manager
-        premiumManager = PremiumManager(requireContext())
+        // Inicializar Premium Manager (usando el método correcto)
+        premiumManager = PremiumManager.getInstance(requireContext())
 
         // Inicializar Export Manager
         exportManager = ExportManager(requireContext())
@@ -100,13 +100,13 @@ class StatsFragment : Fragment() {
 
         // Configurar botón de exportar
         buttonExport.setOnClickListener {
-            // Verificar si es usuario premium para exportar
-            premiumManager.isPremium.observe(viewLifecycleOwner) { isPremium ->
-                if (isPremium) {
-                    exportData()
-                } else {
-                    showPremiumDialog("Exportar a Excel")
-                }
+            // Verificar si el usuario es premium
+            if (premiumManager.isPremium.value == true) {
+                // Exportar estadísticas si el usuario es premium
+                exportData()
+            } else {
+                // Si no es premium, mostrar pantalla de premium
+                findNavController().navigate(R.id.action_statsFragment_to_premiumFragment)
             }
         }
 

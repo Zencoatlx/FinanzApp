@@ -24,8 +24,8 @@ import com.finanzapp.data.entity.Transaction
 abstract class AppDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
     abstract fun savingGoalDao(): SavingGoalDao
-    abstract fun categoryDao(): CategoryDao
     abstract fun budgetDao(): BudgetDao
+    abstract fun categoryDao(): CategoryDao
 
     companion object {
         @Volatile

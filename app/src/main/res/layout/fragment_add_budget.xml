@@ -9,26 +9,26 @@
         android:id="@+id/textTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Crear Presupuesto"
+        android:text="Nuevo Presupuesto"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputLayoutCategory"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:id="@+id/inputLayoutName"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Categoría"
+        android:hint="Nombre del presupuesto"
         app:layout_constraintTop_toBottomOf="@+id/textTitle">
 
-        <AutoCompleteTextView
-            android:id="@+id/dropdownCategory"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none" />
+            android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -37,8 +37,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Monto presupuestado"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutCategory">
+        android:hint="Monto límite"
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutName">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextAmount"
@@ -47,65 +47,30 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/textMonthLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Duración del presupuesto:"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutAmount" />
-
-    <TextView
-        android:id="@+id/textMonthInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Abril 2025"
-        android:textColor="@color/design_default_color_primary"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textMonthLabel" />
-
-    <com.google.android.material.slider.Slider
-        android:id="@+id/sliderMonths"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayoutCategory"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:valueFrom="1"
-        android:valueTo="12"
-        android:stepSize="1"
-        app:labelBehavior="gone"
-        app:layout_constraintTop_toBottomOf="@+id/textMonthInfo" />
+        android:layout_marginTop="16dp"
+        android:hint="Categoría"
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutAmount">
 
-    <TextView
-        android:id="@+id/textMonthsMin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1 mes"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sliderMonths" />
-
-    <TextView
-        android:id="@+id/textMonthsMax"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="12 meses"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sliderMonths" />
+        <AutoCompleteTextView
+            android:id="@+id/dropdownCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/buttonSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="Guardar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textMonthsMin"
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutCategory"
         app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

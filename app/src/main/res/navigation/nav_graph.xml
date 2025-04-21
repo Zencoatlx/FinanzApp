@@ -37,23 +37,12 @@
     <fragment
         android:id="@+id/statsFragment"
         android:name="com.finanzapp.ui.fragments.StatsFragment"
-        android:label="Estadísticas" />
+        android:label="Estadísticas">
 
-    <fragment
-        android:id="@+id/budgetsFragment"
-        android:name="com.finanzapp.ui.fragments.BudgetsFragment"
-        android:label="Presupuestos">
-
-        <!-- Acción que faltaba y causaba el primer error -->
         <action
-            android:id="@+id/action_budgetsFragment_to_premiumFragment"
+            android:id="@+id/action_statsFragment_to_premiumFragment"
             app:destination="@id/premiumFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/premiumFragment"
-        android:name="com.finanzapp.ui.fragments.PremiumFragment"
-        android:label="Premium" />
 
     <fragment
         android:id="@+id/addTransactionFragment"
@@ -64,4 +53,30 @@
         android:id="@+id/addSavingGoalFragment"
         android:name="com.finanzapp.ui.fragments.AddSavingGoalFragment"
         android:label="Nueva Meta de Ahorro" />
+
+    <fragment
+        android:id="@+id/budgetsFragment"
+        android:name="com.finanzapp.ui.fragments.BudgetsFragment"
+        android:label="Presupuestos">
+
+        <action
+            android:id="@+id/action_budgetsFragment_to_addBudgetFragment"
+            app:destination="@id/addBudgetFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addBudgetFragment"
+        android:name="com.finanzapp.ui.fragments.AddBudgetFragment"
+        android:label="Nuevo Presupuesto">
+
+        <argument
+            android:name="budgetId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/premiumFragment"
+        android:name="com.finanzapp.ui.fragments.PremiumFragment"
+        android:label="Premium" />
 </navigation>

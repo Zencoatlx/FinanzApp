@@ -2,133 +2,69 @@ package com.finanzapp.util
 
 import android.app.Activity
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.android.billingclient.api.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
-class PremiumManager(private val context: Context) : PurchasesUpdatedListener {
-
-    private val billingClient = BillingClient.newBuilder(context)
-        .setListener(this)
-        .enablePendingPurchases()
-        .build()
-
-    private val _isPremium = MutableLiveData<Boolean>(false)
+class PremiumManager private constructor(context: Context) {
+    private val appContext = context.applicationContext
+    private val _isPremium = MutableLiveData<Boolean>()
     val isPremium: LiveData<Boolean> = _isPremium
 
-    private val _productDetails = MutableLiveData<ProductDetails?>()
-    val productDetails: LiveData<ProductDetails?> = _productDetails
+    private val _monthlyPrice = MutableLiveData<String>()
+    val monthlyPrice: LiveData<String> = _monthlyPrice
 
-    private val productId = "premium_subscription"
+    private val _yearlyPrice = MutableLiveData<String>()
+    val yearlyPrice: LiveData<String> = _yearlyPrice
+
+    private val _lifetimePrice = MutableLiveData<String>()
+    val lifetimePrice: LiveData<String> = _lifetimePrice
+
+    // Valores de prueba
+    val hasTrialPeriod = true
+    val trialDaysRemaining = 7
+
+    companion object {
+        const val PRODUCT_ID_MONTHLY = "finanzapp.premium.monthly"
+        const val PRODUCT_ID_YEARLY = "finanzapp.premium.yearly"
+        const val PRODUCT_ID_LIFETIME = "finanzapp.premium.lifetime"
+
+        @Volatile
+        private var instance: PremiumManager? = null
+
+        fun getInstance(context: Context): PremiumManager {
+            return instance ?: synchronized(this) {
+                instance ?: PremiumManager(context).also { instance = it }
+            }
+        }
+    }
 
     init {
-        connectToBillingService()
+        // En una implementación real, aquí inicializaríamos el SDK de facturación
+        // y obtendríamos el estado de suscripción del usuario
+        _isPremium.value = false
+
+        // Precios de prueba
+        _monthlyPrice.value = "$3.99"
+        _yearlyPrice.value = "$29.99"
+        _lifetimePrice.value = "$49.99"
     }
 
-    private fun connectToBillingService() {
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    // El servicio de facturación está listo
-                    queryPurchases()
-                    queryProductDetails()
-                }
-            }
+    // Función que simula la compra
+    fun launchBillingFlow(activity: Activity, productId: String) {
+        // En una implementación real, aquí lanzaríamos el flujo de facturación
+        Toast.makeText(appContext, "Iniciando compra de: $productId", Toast.LENGTH_SHORT).show()
 
-            override fun onBillingServiceDisconnected() {
-                // Intentar reconectar al servicio
-                connectToBillingService()
-            }
-        })
+        // Simulamos una compra exitosa después de un tiempo
+        activity.window.decorView.postDelayed({
+            // Simulamos que la compra fue exitosa
+            _isPremium.value = true
+            Toast.makeText(appContext, "¡Compra exitosa! Ahora eres Premium", Toast.LENGTH_LONG).show()
+        }, 2000)
     }
 
-    // Cambiado de private a public para que PremiumFragment pueda acceder a él
-    fun queryPurchases() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val purchasesResult = billingClient.queryPurchasesAsync(
-                QueryPurchasesParams.newBuilder()
-                    .setProductType(BillingClient.ProductType.SUBS)
-                    .build()
-            )
-
-            val purchases = purchasesResult.purchasesList
-            _isPremium.postValue(purchases.any { purchase ->
-                purchase.products.contains(productId) &&
-                        purchase.purchaseState == Purchase.PurchaseState.PURCHASED
-            })
-        }
-    }
-
-    private fun queryProductDetails() {
-        val queryProductDetailsParams = QueryProductDetailsParams.newBuilder()
-            .setProductList(
-                listOf(
-                    QueryProductDetailsParams.Product.newBuilder()
-                        .setProductId(productId)
-                        .setProductType(BillingClient.ProductType.SUBS)
-                        .build()
-                )
-            )
-            .build()
-
-        // Corrigiendo la llamada a queryProductDetailsAsync con la API correcta
-        CoroutineScope(Dispatchers.IO).launch {
-            val productDetailsResult = billingClient.queryProductDetailsAsync(queryProductDetailsParams)
-
-            if (productDetailsResult.productDetailsList?.isNotEmpty() == true) {
-                _productDetails.postValue(productDetailsResult.productDetailsList?.first())
-            }
-        }
-    }
-
-    fun launchBillingFlow(activity: Activity) {
-        val productDetails = _productDetails.value ?: return
-
-        val offerToken = productDetails.subscriptionOfferDetails?.firstOrNull()?.offerToken ?: return
-
-        val billingFlowParams = BillingFlowParams.newBuilder()
-            .setProductDetailsParamsList(
-                listOf(
-                    BillingFlowParams.ProductDetailsParams.newBuilder()
-                        .setProductDetails(productDetails)
-                        .setOfferToken(offerToken)
-                        .build()
-                )
-            )
-            .build()
-
-        billingClient.launchBillingFlow(activity, billingFlowParams)
-    }
-
-    override fun onPurchasesUpdated(
-        billingResult: BillingResult,
-        purchases: MutableList<Purchase>?
-    ) {
-        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
-            for (purchase in purchases) {
-                if (purchase.products.contains(productId)) {
-                    _isPremium.postValue(true)
-                    // Verificar y reconocer la compra
-                    if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                        acknowledgePurchase(purchase)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun acknowledgePurchase(purchase: Purchase) {
-        if (!purchase.isAcknowledged) {
-            val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
-                .setPurchaseToken(purchase.purchaseToken)
-                .build()
-
-            CoroutineScope(Dispatchers.IO).launch {
-                billingClient.acknowledgePurchase(acknowledgePurchaseParams) { /* Manejar resultado */ }
-            }
-        }
+    // Simulamos la verificación de características disponibles
+    fun isFeatureSupported(featureId: String): Boolean {
+        return true
     }
 }

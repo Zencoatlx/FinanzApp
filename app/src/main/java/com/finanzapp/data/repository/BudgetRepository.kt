@@ -3,7 +3,6 @@ package com.finanzapp.data.repository
 import androidx.lifecycle.LiveData
 import com.finanzapp.data.dao.BudgetDao
 import com.finanzapp.data.entity.Budget
-import java.util.Date
 
 class BudgetRepository(private val budgetDao: BudgetDao) {
     val allBudgets: LiveData<List<Budget>> = budgetDao.getAllBudgets()
@@ -20,15 +19,7 @@ class BudgetRepository(private val budgetDao: BudgetDao) {
         budgetDao.delete(budget)
     }
 
-    suspend fun getBudgetById(id: Long): Budget? {
+    fun getBudgetById(id: Long): LiveData<Budget> {
         return budgetDao.getBudgetById(id)
-    }
-
-    fun getBudgetsByDateRange(startDate: Date, endDate: Date): LiveData<List<Budget>> {
-        return budgetDao.getBudgetsByDateRange(startDate, endDate)
-    }
-
-    fun getBudgetsByCategory(category: String): LiveData<List<Budget>> {
-        return budgetDao.getBudgetsByCategory(category)
     }
 }

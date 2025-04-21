@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.finanzapp.R
 import com.finanzapp.data.entity.Budget
 import java.text.NumberFormat
-import java.text.SimpleDateFormat
 import java.util.Locale
 
 class BudgetAdapter(private val onItemClick: (Budget) -> Unit) :
@@ -20,50 +19,46 @@ class BudgetAdapter(private val onItemClick: (Budget) -> Unit) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BudgetViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_budget, parent, false)
-        return BudgetViewHolder(view, onItemClick)
+        return BudgetViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: BudgetViewHolder, position: Int) {
         val budget = getItem(position)
         holder.bind(budget)
+        holder.itemView.setOnClickListener { onItemClick(budget) }
     }
 
-    class BudgetViewHolder(itemView: View, private val onItemClick: (Budget) -> Unit) :
-        RecyclerView.ViewHolder(itemView) {
-
-        private val textBudgetName: TextView = itemView.findViewById(R.id.textBudgetName)
-        private val textBudgetPeriod: TextView = itemView.findViewById(R.id.textBudgetPeriod)
-        private val progressBudget: ProgressBar = itemView.findViewById(R.id.progressBudget)
-        private val textBudgetProgress: TextView = itemView.findViewById(R.id.textBudgetProgress)
-        private val textBudgetAmount: TextView = itemView.findViewById(R.id.textBudgetAmount)
+    class BudgetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val name: TextView = itemView.findViewById(R.id.textBudgetName)
+        private val progressBar: ProgressBar = itemView.findViewById(R.id.progressBudget)
+        private val progressText: TextView = itemView.findViewById(R.id.textBudgetProgress)
+        private val percentage: TextView = itemView.findViewById(R.id.textBudgetPercentage)
 
         fun bind(budget: Budget) {
-            textBudgetName.text = budget.category
-
-            // Formatear fecha
-            val dateFormat = SimpleDateFormat("MMMM yyyy", Locale("es", "MX"))
-            textBudgetPeriod.text = dateFormat.format(budget.date)
+            name.text = budget.name
 
             // Calcular porcentaje
-            val spent = budget.spent ?: 0.0
             val progress = if (budget.amount > 0) {
-                (spent / budget.amount * 100).toInt()
+                (budget.spent / budget.amount * 100).toInt()
             } else {
                 0
             }
 
-            progressBudget.progress = progress
+            progressBar.progress = progress
+            percentage.text = "$progress%"
 
             // Formatear montos
             val format = NumberFormat.getCurrencyInstance(Locale("es", "MX"))
-            textBudgetProgress.text = "${format.format(spent)} / ${format.format(budget.amount)}"
+            progressText.text = "${format.format(budget.spent)} / ${format.format(budget.amount)}"
 
-            // Aquí cambiamos la referencia al color a R.color que es lo correcto
-            textBudgetAmount.text = "$progress%"
-            textBudgetAmount.setTextColor(itemView.context.getColor(R.color.design_default_color_primary))
-
-            // Configurar click
-            itemView.setOnClickListener { onItemClick(budget) }
+            // Cambiar color del porcentaje si se está acercando al límite
+            if (progress >= 90) {
+                percentage.setTextColor(itemView.context.getColor(android.R.color.holo_red_dark))
+            } else if (progress >= 75) {
+                percentage.setTextColor(itemView.context.getColor(android.R.color.holo_orange_dark))
+            } else {
+                percentage.setTextColor(itemView.context.getColor(android.R.color.holo_green_dark))
+            }
         }
     }
 

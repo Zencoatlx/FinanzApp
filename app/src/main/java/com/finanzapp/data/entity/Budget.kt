@@ -8,10 +8,9 @@ import java.util.Date
 data class Budget(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val category: String,
+    val name: String,
     val amount: Double,
-    val spent: Double? = 0.0,
-    val date: Date,
-    val months: Int = 1,
+    val category: String,
+    val spent: Double = 0.0,
     val createdAt: Date = Date()
 )

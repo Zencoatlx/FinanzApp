@@ -8,43 +8,25 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.finanzapp.R
 import com.finanzapp.data.entity.Budget
-import com.finanzapp.data.entity.Category
-import com.finanzapp.data.entity.TransactionType
 import com.finanzapp.ui.viewmodel.BudgetViewModel
-import com.finanzapp.ui.viewmodel.CategoryViewModel
-import com.google.android.material.slider.Slider
-import kotlinx.coroutines.launch
-import java.text.NumberFormat
-import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 
 class AddBudgetFragment : Fragment() {
 
     private lateinit var viewModel: BudgetViewModel
-    private lateinit var categoryViewModel: CategoryViewModel
-
+    private lateinit var editTextName: EditText
     private lateinit var editTextAmount: EditText
     private lateinit var dropdownCategory: AutoCompleteTextView
-    private lateinit var sliderMonths: Slider
-    private lateinit var textMonthInfo: TextView
     private lateinit var buttonSave: Button
 
-    // Usar Safe Args para recibir argumentos
-    private val args: AddBudgetFragmentArgs by navArgs()
-
-    private var categories: List<Category> = emptyList()
-    private var selectedMonth = Calendar.getInstance()
+    // En lugar de usar navArgs, accedemos directamente a los argumentos
+    private var budgetId: Long = -1L
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,128 +39,102 @@ class AddBudgetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inicializar ViewModels
         viewModel = ViewModelProvider(requireActivity())[BudgetViewModel::class.java]
-        categoryViewModel = ViewModelProvider(requireActivity())[CategoryViewModel::class.java]
+
+        // Obtenemos el ID del presupuesto de los argumentos
+        arguments?.let {
+            budgetId = it.getLong("budgetId", -1L)
+        }
 
         // Inicializar vistas
+        editTextName = view.findViewById(R.id.editTextName)
         editTextAmount = view.findViewById(R.id.editTextAmount)
         dropdownCategory = view.findViewById(R.id.dropdownCategory)
-        sliderMonths = view.findViewById(R.id.sliderMonths)
-        textMonthInfo = view.findViewById(R.id.textMonthInfo)
         buttonSave = view.findViewById(R.id.buttonSave)
 
-        // Cargar categorías de gastos
-        categoryViewModel.getCategoriesByType(TransactionType.EXPENSE).observe(viewLifecycleOwner) { expenseCategories ->
-            categories = expenseCategories
-            val categoryNames = expenseCategories.map { it.name }
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, categoryNames)
-            dropdownCategory.setAdapter(adapter)
+        // Configurar categorías
+        setupCategoryDropdown()
 
-            // Si hay categorías, seleccionar la primera por defecto
-            if (categoryNames.isNotEmpty()) {
-                dropdownCategory.setText(categoryNames[0], false)
-            }
-        }
-
-        // Configurar slider de meses
-        sliderMonths.addOnChangeListener { _, value, _ ->
-            val months = value.toInt()
-            updateMonthText(months)
-        }
-
-        // Valor inicial del slider
-        sliderMonths.value = 1f
-        updateMonthText(1)
-
-        // Si es edición, cargar datos existentes
-        if (args.budgetId != -1L) {
-            lifecycleScope.launch {
-                val budget = viewModel.getBudgetById(args.budgetId)
-                if (budget != null) {
-                    // Rellenar campos con datos existentes
-                    editTextAmount.setText(budget.amount.toString())
-                    dropdownCategory.setText(budget.category, false)
-
-                    // Establecer mes seleccionado
-                    val cal = Calendar.getInstance()
-                    cal.time = budget.date
-                    selectedMonth = cal
-
-                    // Establecer duración en meses
-                    sliderMonths.value = budget.months.toFloat()
-                    updateMonthText(budget.months)
-                }
-            }
+        // Si estamos editando un presupuesto existente
+        if (budgetId != -1L) {
+            loadBudget()
         }
 
         // Configurar botón guardar
         buttonSave.setOnClickListener {
-            saveAndReturn()
+            saveBudget()
         }
     }
 
-    private fun updateMonthText(months: Int) {
-        val dateFormat = SimpleDateFormat("MMMM yyyy", Locale("es", "MX"))
-        val calendar = Calendar.getInstance()
-        calendar.time = selectedMonth.time
+    private fun setupCategoryDropdown() {
+        val categories = arrayOf(
+            "Comida", "Transporte", "Vivienda", "Entretenimiento",
+            "Salud", "Educación", "Ropa", "Servicios", "Otro"
+        )
 
-        val endCalendar = Calendar.getInstance()
-        endCalendar.time = selectedMonth.time
-        endCalendar.add(Calendar.MONTH, months - 1)
-
-        val text = if (months > 1) {
-            "${dateFormat.format(calendar.time)} - ${dateFormat.format(endCalendar.time)}"
-        } else {
-            dateFormat.format(calendar.time)
-        }
-
-        textMonthInfo.text = text
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, categories)
+        dropdownCategory.setAdapter(adapter)
+        dropdownCategory.setText(categories[0], false)
     }
 
-    private fun saveAndReturn() {
-        val amount = editTextAmount.text.toString().toDoubleOrNull() ?: 0.0
+    private fun loadBudget() {
+        viewModel.getBudgetById(budgetId).observe(viewLifecycleOwner) { budget ->
+            if (budget != null) {
+                editTextName.setText(budget.name)
+                editTextAmount.setText(budget.amount.toString())
+                dropdownCategory.setText(budget.category, false)
+
+                // Cambiar el texto del botón
+                buttonSave.text = "Actualizar"
+            }
+        }
+    }
+
+    private fun saveBudget() {
+        val name = editTextName.text.toString()
+        val amountText = editTextAmount.text.toString()
         val category = dropdownCategory.text.toString()
-        val months = sliderMonths.value.toInt()
 
-        if (amount <= 0) {
-            editTextAmount.error = "Ingrese un monto válido"
+        // Validar campos
+        if (name.isBlank() || amountText.isBlank() || category.isBlank()) {
+            Toast.makeText(requireContext(), "Por favor complete todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if (category.isBlank()) {
-            dropdownCategory.error = "Seleccione una categoría"
+        val amount = amountText.toDoubleOrNull()
+        if (amount == null || amount <= 0) {
+            Toast.makeText(requireContext(), "Por favor ingrese un monto válido", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val budget = if (args.budgetId != -1L) {
+        // Crear o actualizar presupuesto
+        if (budgetId != -1L) {
             // Actualizar presupuesto existente
-            lifecycleScope.launch {
-                val existingBudget = viewModel.getBudgetById(args.budgetId)
+            viewModel.getBudgetById(budgetId).observe(viewLifecycleOwner) { existingBudget ->
                 if (existingBudget != null) {
-                    val updatedBudget = existingBudget.copy(
+                    val updatedBudget = Budget(
+                        id = existingBudget.id,
+                        name = name,
                         amount = amount,
                         category = category,
-                        date = selectedMonth.time,
-                        months = months
+                        spent = existingBudget.spent,
+                        createdAt = existingBudget.createdAt
                     )
                     viewModel.update(updatedBudget)
                     findNavController().popBackStack()
                 }
             }
-            return
         } else {
             // Crear nuevo presupuesto
-            Budget(
+            val budget = Budget(
+                name = name,
                 amount = amount,
                 category = category,
-                date = selectedMonth.time,
-                months = months,
+                spent = 0.0,
                 createdAt = Date()
             )
+            viewModel.insert(budget)
+            findNavController().popBackStack()
         }
-
-        viewModel.insert(budget)
-        findNavController().popBackStack()
     }
 }

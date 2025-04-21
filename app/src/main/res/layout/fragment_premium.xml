@@ -6,10 +6,10 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/textTitle"
+        android:id="@+id/textWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="FinanzApp Premium"
+        android:text="Mejora a Premium"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,87 +17,58 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textDescription"
-        android:layout_width="match_parent"
+        android:id="@+id/textTrialInfo"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Desbloquea todas las funciones premium para llevar tus finanzas al siguiente nivel"
-        android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@+id/textTitle" />
-
-    <ImageView
-        android:id="@+id/imagePremium"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="24dp"
-        android:src="@drawable/ic_stats"
+        android:text="Tienes un periodo de prueba gratuito de 7 días."
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDescription"
-        app:tint="@color/purple_500" />
+        app:layout_constraintTop_toBottomOf="@+id/textWelcome" />
 
     <TextView
-        android:id="@+id/textBenefits"
+        android:id="@+id/textFeatures"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Con FinanzApp Premium obtienes:\n• Exportación ilimitada a Excel\n• Gráficos avanzados\n• Presupuestos personalizados\n• Análisis de categorías\n• Sin publicidad"
-        app:layout_constraintTop_toBottomOf="@+id/imagePremium" />
-
-    <TextView
-        android:id="@+id/textTrialInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Disfruta de tu período de prueba gratuito de 14 días"
-        android:textAlignment="center"
+        android:layout_marginTop="32dp"
+        android:text="Con Premium obtienes:"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/textBenefits" />
-
-    <Button
-        android:id="@+id/buttonSubscribeMonthly"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Suscripción Mensual - $2.99/mes"
         app:layout_constraintTop_toBottomOf="@+id/textTrialInfo" />
 
-    <Button
-        android:id="@+id/buttonSubscribeYearly"
+    <TextView
+        android:id="@+id/textFeaturesList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Suscripción Anual - $24.99/año"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSubscribeMonthly" />
-
-    <Button
-        android:id="@+id/buttonSubscribeLifetime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Compra Vitalicia - $59.99"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSubscribeYearly" />
-
-    <Button
-        android:id="@+id/buttonRestorePurchases"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Restaurar Compras"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSubscribeLifetime" />
+        android:lineSpacingExtra="8dp"
+        android:text="✓ Estadísticas avanzadas\n✓ Exportación a Excel\n✓ Presupuestos ilimitados\n✓ Sin anuncios\n✓ Sincronización en la nube"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/textFeatures" />
 
     <Button
-        android:id="@+id/buttonCancel"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="wrap_content"
+        android:id="@+id/buttonMonthly"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="No, gracias"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRestorePurchases" />
+        android:layout_marginTop="48dp"
+        android:text="Mensual: $3.99/mes"
+        app:layout_constraintTop_toBottomOf="@+id/textFeaturesList" />
+
+    <Button
+        android:id="@+id/buttonYearly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Anual: $29.99/año"
+        app:layout_constraintTop_toBottomOf="@+id/buttonMonthly" />
+
+    <Button
+        android:id="@+id/buttonLifetime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="De por vida: $49.99"
+        app:layout_constraintTop_toBottomOf="@+id/buttonYearly" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

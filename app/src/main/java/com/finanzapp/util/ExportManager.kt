@@ -4,266 +4,244 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
-import android.util.Log
+import android.widget.Toast
 import androidx.core.content.FileProvider
-import com.finanzapp.data.entity.Budget
-import com.finanzapp.data.entity.SavingGoal
 import com.finanzapp.data.entity.Transaction
-import org.apache.poi.hssf.usermodel.HSSFWorkbook
-import org.apache.poi.ss.usermodel.Cell
-import org.apache.poi.ss.usermodel.Row
-import org.apache.poi.ss.usermodel.Sheet
-import org.apache.poi.ss.usermodel.Workbook
+import com.finanzapp.data.entity.SavingGoal
+import com.finanzapp.data.entity.Budget
+import org.apache.poi.ss.usermodel.CellStyle
+import org.apache.poi.ss.usermodel.FillPatternType
+import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-/**
- * Clase para manejar la exportación de datos a Excel.
- */
 class ExportManager(private val context: Context) {
 
-    companion object {
-        private const val TAG = "ExportManager"
-    }
-
-    /**
-     * Exporta las transacciones a un archivo Excel.
-     */
     fun exportTransactionsToExcel(transactions: List<Transaction>): Boolean {
         try {
-            // Crear libro de trabajo
-            val workbook: Workbook = HSSFWorkbook()
+            val workbook = XSSFWorkbook()
+            val sheet = workbook.createSheet("Transacciones")
 
-            // Crear hoja
-            val sheet: Sheet = workbook.createSheet("Transacciones")
+            // Estilos
+            val headerStyle = workbook.createCellStyle()
+            headerStyle.fillForegroundColor = IndexedColors.LIGHT_BLUE.index
+            headerStyle.fillPattern = FillPatternType.SOLID_FOREGROUND
 
-            // Crear encabezados
-            val headerRow: Row = sheet.createRow(0)
+            val dateStyle = workbook.createCellStyle()
+            val createHelper = workbook.creationHelper
+            dateStyle.dataFormat = createHelper.createDataFormat().getFormat("dd/mm/yyyy")
 
-            // Definir encabezados
-            val headers = arrayOf("Fecha", "Categoría", "Descripción", "Monto", "Tipo")
+            // Crear cabecera
+            val headerRow = sheet.createRow(0)
+            val headers = arrayOf("ID", "Descripción", "Monto", "Categoría", "Tipo", "Fecha", "Recurrente")
 
             for (i in headers.indices) {
-                val cell: Cell = headerRow.createCell(i)
+                val cell = headerRow.createCell(i)
                 cell.setCellValue(headers[i])
+                cell.cellStyle = headerStyle
             }
 
             // Llenar datos
             for (i in transactions.indices) {
-                val row: Row = sheet.createRow(i + 1)
                 val transaction = transactions[i]
+                val row = sheet.createRow(i + 1)
 
-                // Formatear fecha
-                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale("es", "MX"))
-                row.createCell(0).setCellValue(dateFormat.format(transaction.date))
-
-                // Categoría
-                row.createCell(1).setCellValue(transaction.category)
-
-                // Descripción
-                row.createCell(2).setCellValue(transaction.description)
-
-                // Monto
-                row.createCell(3).setCellValue(transaction.amount)
-
-                // Tipo
+                row.createCell(0).setCellValue(transaction.id.toDouble())
+                row.createCell(1).setCellValue(transaction.description)
+                row.createCell(2).setCellValue(transaction.amount)
+                row.createCell(3).setCellValue(transaction.category)
                 row.createCell(4).setCellValue(if (transaction.isIncome) "Ingreso" else "Gasto")
+
+                val dateCell = row.createCell(5)
+                dateCell.setCellValue(transaction.date)
+                dateCell.cellStyle = dateStyle
+
+                row.createCell(6).setCellValue(if (transaction.isRecurring) "Sí" else "No")
             }
 
-            // Ajustar ancho de columnas
+            // Autoajustar columnas
             for (i in headers.indices) {
                 sheet.autoSizeColumn(i)
             }
 
             // Guardar archivo
-            return saveExcelFile(workbook, "Transacciones_${getCurrentDateFormatted()}.xls")
+            return saveExcelFile(workbook, "Transacciones_${getCurrentDate()}.xlsx")
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error exportando transacciones: ${e.message}")
+            e.printStackTrace()
+            Toast.makeText(context, "Error al exportar: ${e.message}", Toast.LENGTH_LONG).show()
             return false
         }
     }
 
-    /**
-     * Exporta las metas de ahorro a un archivo Excel.
-     */
-    fun exportSavingGoalsToExcel(savingGoals: List<SavingGoal>): Boolean {
+    fun exportSavingsToExcel(savingGoals: List<SavingGoal>): Boolean {
         try {
-            // Crear libro de trabajo
-            val workbook: Workbook = HSSFWorkbook()
-            val sheet: Sheet = workbook.createSheet("Metas de Ahorro")
+            val workbook = XSSFWorkbook()
+            val sheet = workbook.createSheet("Metas de Ahorro")
 
-            // Crear encabezados
-            val headerRow: Row = sheet.createRow(0)
+            // Estilos
+            val headerStyle = workbook.createCellStyle()
+            headerStyle.fillForegroundColor = IndexedColors.LIGHT_GREEN.index
+            headerStyle.fillPattern = FillPatternType.SOLID_FOREGROUND
 
-            // Definir encabezados
-            val headers = arrayOf("Nombre", "Monto Objetivo", "Monto Actual", "Progreso", "Fecha Límite", "Fecha Creación")
+            val dateStyle = workbook.createCellStyle()
+            val createHelper = workbook.creationHelper
+            dateStyle.dataFormat = createHelper.createDataFormat().getFormat("dd/mm/yyyy")
+
+            // Crear cabecera
+            val headerRow = sheet.createRow(0)
+            val headers = arrayOf("ID", "Nombre", "Monto Objetivo", "Monto Actual", "Progreso", "Fecha Límite", "Creado")
 
             for (i in headers.indices) {
-                val cell: Cell = headerRow.createCell(i)
+                val cell = headerRow.createCell(i)
                 cell.setCellValue(headers[i])
+                cell.cellStyle = headerStyle
             }
 
             // Llenar datos
             for (i in savingGoals.indices) {
-                val row: Row = sheet.createRow(i + 1)
-                val goal = savingGoals[i]
+                val savingGoal = savingGoals[i]
+                val row = sheet.createRow(i + 1)
 
-                // Nombre
-                row.createCell(0).setCellValue(goal.name)
+                row.createCell(0).setCellValue(savingGoal.id.toDouble())
+                row.createCell(1).setCellValue(savingGoal.name)
+                row.createCell(2).setCellValue(savingGoal.targetAmount)
+                row.createCell(3).setCellValue(savingGoal.currentAmount)
 
-                // Monto Objetivo
-                row.createCell(1).setCellValue(goal.targetAmount)
+                val progress = if (savingGoal.targetAmount > 0)
+                    savingGoal.currentAmount / savingGoal.targetAmount * 100
+                else 0.0
+                row.createCell(4).setCellValue("${"%.2f".format(progress)}%")
 
-                // Monto Actual
-                row.createCell(2).setCellValue(goal.currentAmount)
+                if (savingGoal.deadline != null) {
+                    val deadlineCell = row.createCell(5)
+                    deadlineCell.setCellValue(savingGoal.deadline)
+                    deadlineCell.cellStyle = dateStyle
+                } else {
+                    row.createCell(5).setCellValue("Sin fecha límite")
+                }
 
-                // Progreso (porcentaje)
-                val progress = if (goal.targetAmount > 0) goal.currentAmount / goal.targetAmount * 100 else 0.0
-                row.createCell(3).setCellValue("${String.format("%.1f", progress)}%")
-
-                // Fecha Límite
-                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale("es", "MX"))
-                row.createCell(4).setCellValue(goal.deadline?.let { dateFormat.format(it) } ?: "Sin fecha")
-
-                // Fecha Creación
-                row.createCell(5).setCellValue(dateFormat.format(goal.createdAt))
+                val createdCell = row.createCell(6)
+                createdCell.setCellValue(savingGoal.createdAt)
+                createdCell.cellStyle = dateStyle
             }
 
-            // Ajustar ancho de columnas
+            // Autoajustar columnas
             for (i in headers.indices) {
                 sheet.autoSizeColumn(i)
             }
 
             // Guardar archivo
-            return saveExcelFile(workbook, "Metas_Ahorro_${getCurrentDateFormatted()}.xls")
+            return saveExcelFile(workbook, "Metas_de_Ahorro_${getCurrentDate()}.xlsx")
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error exportando metas de ahorro: ${e.message}")
+            e.printStackTrace()
+            Toast.makeText(context, "Error al exportar: ${e.message}", Toast.LENGTH_LONG).show()
             return false
         }
     }
 
-    /**
-     * Exporta los presupuestos a un archivo Excel.
-     */
     fun exportBudgetsToExcel(budgets: List<Budget>): Boolean {
         try {
-            // Crear libro de trabajo
-            val workbook: Workbook = HSSFWorkbook()
-            val sheet: Sheet = workbook.createSheet("Presupuestos")
+            val workbook = XSSFWorkbook()
+            val sheet = workbook.createSheet("Presupuestos")
 
-            // Crear encabezados
-            val headerRow: Row = sheet.createRow(0)
+            // Estilos
+            val headerStyle = workbook.createCellStyle()
+            headerStyle.fillForegroundColor = IndexedColors.LIGHT_ORANGE.index
+            headerStyle.fillPattern = FillPatternType.SOLID_FOREGROUND
 
-            // Definir encabezados
-            val headers = arrayOf("Categoría", "Fecha", "Monto Presupuestado", "Monto Gastado", "Porcentaje Usado", "Duración (meses)")
+            val dateStyle = workbook.createCellStyle()
+            val createHelper = workbook.creationHelper
+            dateStyle.dataFormat = createHelper.createDataFormat().getFormat("dd/mm/yyyy")
+
+            // Crear cabecera
+            val headerRow = sheet.createRow(0)
+            val headers = arrayOf("ID", "Nombre", "Monto Límite", "Gastado", "Progreso", "Categoría", "Creado")
 
             for (i in headers.indices) {
-                val cell: Cell = headerRow.createCell(i)
-                cell.setCellValue(headers[i])
+                headerRow.createCell(i).setCellValue(headers[i])
             }
 
             // Llenar datos
             for (i in budgets.indices) {
-                val row: Row = sheet.createRow(i + 1)
                 val budget = budgets[i]
+                val row = sheet.createRow(i + 1)
 
-                // Categoría
-                row.createCell(0).setCellValue(budget.category)
-
-                // Fecha
-                val dateFormat = SimpleDateFormat("MMMM yyyy", Locale("es", "MX"))
-                row.createCell(1).setCellValue(dateFormat.format(budget.date))
-
-                // Monto Presupuestado
+                row.createCell(0).setCellValue(budget.id.toDouble())
+                row.createCell(1).setCellValue(budget.name)
                 row.createCell(2).setCellValue(budget.amount)
+                row.createCell(3).setCellValue(budget.spent)
 
-                // Monto Gastado
-                val spent = budget.spent ?: 0.0
-                row.createCell(3).setCellValue(spent)
+                val progress = if (budget.amount > 0)
+                    budget.spent / budget.amount * 100
+                else 0.0
+                row.createCell(4).setCellValue("${"%.2f".format(progress)}%")
 
-                // Porcentaje Usado
-                val percentage = if (budget.amount > 0) spent / budget.amount * 100 else 0.0
-                row.createCell(4).setCellValue("${String.format("%.1f", percentage)}%")
+                row.createCell(5).setCellValue(budget.category)
 
-                // Duración
-                cell.setCellValue(value.toString())
+                val createdCell = row.createCell(6)
+                createdCell.setCellValue(budget.createdAt)
+                createdCell.cellStyle = dateStyle
             }
 
-            // Ajustar ancho de columnas
+            // Autoajustar columnas
             for (i in headers.indices) {
                 sheet.autoSizeColumn(i)
             }
 
             // Guardar archivo
-            return saveExcelFile(workbook, "Presupuestos_${getCurrentDateFormatted()}.xls")
+            return saveExcelFile(workbook, "Presupuestos_${getCurrentDate()}.xlsx")
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error exportando presupuestos: ${e.message}")
+            e.printStackTrace()
+            Toast.makeText(context, "Error al exportar: ${e.message}", Toast.LENGTH_LONG).show()
             return false
         }
     }
 
-    /**
-     * Guarda un libro de Excel en el almacenamiento y comparte el archivo.
-     */
-    private fun saveExcelFile(workbook: Workbook, fileName: String): Boolean {
+    private fun saveExcelFile(workbook: XSSFWorkbook, fileName: String): Boolean {
         try {
-            // Crear directorio de archivos de la aplicación si no existe
-            val directory = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "FinanzApp")
-            if (!directory.exists()) {
-                directory.mkdirs()
+            // Guardar en almacenamiento externo
+            val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            if (!downloadsDir.exists()) {
+                downloadsDir.mkdirs()
             }
 
-            // Crear archivo
-            val file = File(directory, fileName)
-            val outputStream = FileOutputStream(file)
+            val file = File(downloadsDir, fileName)
+            val fileOut = FileOutputStream(file)
+            workbook.write(fileOut)
+            fileOut.close()
 
-            // Escribir datos y cerrar streams
-            workbook.write(outputStream)
-            outputStream.flush()
-            outputStream.close()
+            // Compartir el archivo
+            val uri = FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",
+                file
+            )
 
-            // Compartir archivo
-            shareFile(file)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(uri, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
+            context.startActivity(Intent.createChooser(intent, "Abrir con..."))
+
+            Toast.makeText(context, "Archivo guardado en Descargas", Toast.LENGTH_LONG).show()
             return true
         } catch (e: Exception) {
-            Log.e(TAG, "Error guardando archivo Excel: ${e.message}")
+            e.printStackTrace()
+            Toast.makeText(context, "Error al guardar: ${e.message}", Toast.LENGTH_LONG).show()
             return false
         }
     }
 
-    /**
-     * Comparte un archivo utilizando una intent.
-     */
-    private fun shareFile(file: File) {
-        val uri = FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.fileprovider",
-            file
-        )
-
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "application/vnd.ms-excel"
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-        // Iniciar la actividad de compartir
-        val chooser = Intent.createChooser(intent, "Compartir Excel")
-        chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(chooser)
-    }
-
-    /**
-     * Obtiene la fecha actual formateada para nombres de archivo.
-     */
-    private fun getCurrentDateFormatted(): String {
-        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         return dateFormat.format(Date())
     }
 }
