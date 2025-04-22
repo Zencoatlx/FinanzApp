@@ -60,11 +60,6 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_budgetsFragment_to_premiumFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
                           </map>
                         </option>
                       </LayoutPositions>
@@ -86,7 +81,23 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_dashboardFragment_to_premiumFragment">
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="onboardingFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="256" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_onboardingFragment_to_dashboardFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -97,6 +108,18 @@
                     </value>
                   </entry>
                   <entry key="premiumFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="privacyPolicyFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -120,6 +143,32 @@
                         <option name="myPositions">
                           <map>
                             <entry key="action_savingsFragment_to_addSavingGoalFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="splashFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_splashFragment_to_dashboardFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_splashFragment_to_onboardingFragment">
                               <value>
                                 <LayoutPositions />
                               </value>

@@ -1,3 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FinanzApp</string>
+
+    <!-- Textos generales -->
+    <string name="back">Volver</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete">Eliminar</string>
+    <string name="edit">Editar</string>
+
+    <!-- Menú principal -->
+    <string name="menu_dashboard">Inicio</string>
+    <string name="menu_transactions">Transacciones</string>
+    <string name="menu_budgets">Presupuestos</string>
+    <string name="menu_savings">Ahorros</string>
+    <string name="menu_stats">Estadísticas</string>
+
+    <!-- Política de privacidad -->
+    <string name="privacy_policy_text">
+        <![CDATA[
+        <h1>Política de Privacidad de FinanzApp</h1>
+
+        <p>Última actualización: 21 de abril de 2025</p>
+
+        <h2>Introducción</h2>
+
+        <p>Gracias por elegir FinanzApp. Esta Política de Privacidad explica cómo recopilamos, utilizamos
+        y protegemos su información cuando utiliza nuestra aplicación móvil.</p>
+
+        <h2>Información que recopilamos</h2>
+
+        <p>La información que recopilamos incluye:</p>
+
+        <ul>
+            <li><strong>Información financiera:</strong> Datos sobre sus transacciones, presupuestos y metas de ahorro.</li>
+            <li><strong>Información de uso:</strong> Datos sobre cómo utiliza la aplicación, como las características
+            que utiliza con más frecuencia.</li>
+            <li><strong>Información del dispositivo:</strong> Modelo de dispositivo, versión del sistema operativo y
+            otra información técnica utilizada para mejorar la aplicación.</li>
+        </ul>
+
+        <h2>Cómo utilizamos su información</h2>
+
+        <p>Utilizamos la información recopilada para:</p>
+
+        <ul>
+            <li>Proporcionar y mantener los servicios de FinanzApp</li>
+            <li>Mejorar y personalizar su experiencia</li>
+            <li>Analizar el uso para mejorar nuestros servicios</li>
+            <li>Comunicarnos con usted sobre actualizaciones o cambios</li>
+        </ul>
+
+        <h2>Almacenamiento de datos</h2>
+
+        <p>Sus datos financieros se almacenan localmente en su dispositivo. No se envían a nuestros servidores
+        a menos que opte por utilizar funciones en la nube (si están disponibles).</p>
+
+        <h2>Compartir datos</h2>
+
+        <p>No vendemos ni compartimos sus datos personales con terceros, excepto:</p>
+
+        <ul>
+            <li>Cuando sea necesario para proporcionar servicios que ha solicitado (como procesamiento de pagos)</li>
+            <li>Cuando sea requerido por la ley</li>
+            <li>Con proveedores de servicios que nos ayudan a operar la aplicación (bajo estrictas condiciones de confidencialidad)</li>
+        </ul>
+
+        <h2>Seguridad</h2>
+
+        <p>Implementamos medidas de seguridad diseñadas para proteger sus datos, pero ningún sistema es completamente seguro.
+        Le recomendamos utilizar contraseñas fuertes y mantener su dispositivo actualizado.</p>
+
+        <h2>Sus derechos</h2>
+
+        <p>Dependiendo de su ubicación, puede tener derechos relacionados con sus datos personales, incluido el acceso,
+        la corrección, la eliminación y la portabilidad de datos.</p>
+
+        <h2>Cambios a esta política</h2>
+
+        <p>Podemos actualizar esta política periódicamente. Le notificaremos cualquier cambio significativo
+        a través de la aplicación o por correo electrónico.</p>
+
+        <h2>Contacto</h2>
+
+        <p>Si tiene preguntas sobre esta política o nuestras prácticas de privacidad,
+        contáctenos en privacy@finanzapp.com.</p>
+        ]]>
+    </string>
 </resources>

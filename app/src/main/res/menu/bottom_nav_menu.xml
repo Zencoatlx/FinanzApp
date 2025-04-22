@@ -3,19 +3,19 @@
     <item
         android:id="@+id/dashboardFragment"
         android:icon="@drawable/ic_dashboard"
-        android:title="Resumen" />
+        android:title="Inicio" />
     <item
         android:id="@+id/transactionsFragment"
         android:icon="@drawable/ic_transactions"
         android:title="Transacciones" />
     <item
+        android:id="@+id/budgetsFragment"
+        android:icon="@drawable/ic_budget"
+        android:title="Presupuestos" />
+    <item
         android:id="@+id/savingsFragment"
         android:icon="@drawable/ic_savings"
         android:title="Ahorros" />
-    <item
-        android:id="@+id/budgetsFragment"
-        android:icon="@drawable/ic_stats"
-        android:title="Presupuestos" />
     <item
         android:id="@+id/statsFragment"
         android:icon="@drawable/ic_stats"

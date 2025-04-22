@@ -1,82 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/dashboardFragment">
+    app:startDestination="@id/splashFragment">
 
+    <!-- Splash Screen -->
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.finanzapp.ui.fragments.SplashFragment"
+        android:label="SplashFragment"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_onboardingFragment"
+            app:destination="@id/onboardingFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Onboarding -->
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.finanzapp.ui.fragments.OnboardingFragment"
+        android:label="OnboardingFragment"
+        tools:layout="@layout/fragment_onboarding">
+        <action
+            android:id="@+id/action_onboardingFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/onboardingFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Dashboard (pantalla principal) -->
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.finanzapp.ui.fragments.DashboardFragment"
-        android:label="Resumen">
-
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_dashboardFragment_to_addTransactionFragment"
             app:destination="@id/addTransactionFragment" />
     </fragment>
 
+    <!-- Pantalla de Transacciones -->
     <fragment
         android:id="@+id/transactionsFragment"
         android:name="com.finanzapp.ui.fragments.TransactionsFragment"
-        android:label="Transacciones">
-
+        android:label="Transacciones"
+        tools:layout="@layout/fragment_transactions">
         <action
             android:id="@+id/action_transactionsFragment_to_addTransactionFragment"
             app:destination="@id/addTransactionFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/savingsFragment"
-        android:name="com.finanzapp.ui.fragments.SavingsFragment"
-        android:label="Ahorros">
-
-        <action
-            android:id="@+id/action_savingsFragment_to_addSavingGoalFragment"
-            app:destination="@id/addSavingGoalFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/statsFragment"
-        android:name="com.finanzapp.ui.fragments.StatsFragment"
-        android:label="Estadísticas">
-
-        <action
-            android:id="@+id/action_statsFragment_to_premiumFragment"
-            app:destination="@id/premiumFragment" />
-    </fragment>
-
+    <!-- Pantalla para Añadir Transacción -->
     <fragment
         android:id="@+id/addTransactionFragment"
         android:name="com.finanzapp.ui.fragments.AddTransactionFragment"
-        android:label="Añadir Transacción" />
+        android:label="Añadir Transacción"
+        tools:layout="@layout/fragment_add_transaction" />
 
-    <fragment
-        android:id="@+id/addSavingGoalFragment"
-        android:name="com.finanzapp.ui.fragments.AddSavingGoalFragment"
-        android:label="Nueva Meta de Ahorro" />
-
+    <!-- Pantalla de Presupuestos -->
     <fragment
         android:id="@+id/budgetsFragment"
         android:name="com.finanzapp.ui.fragments.BudgetsFragment"
-        android:label="Presupuestos">
-
+        android:label="Presupuestos"
+        tools:layout="@layout/fragment_budgets">
         <action
             android:id="@+id/action_budgetsFragment_to_addBudgetFragment"
             app:destination="@id/addBudgetFragment" />
     </fragment>
 
+    <!-- Pantalla para Añadir/Editar Presupuesto -->
     <fragment
         android:id="@+id/addBudgetFragment"
         android:name="com.finanzapp.ui.fragments.AddBudgetFragment"
-        android:label="Nuevo Presupuesto">
+        android:label="Añadir Presupuesto"
+        tools:layout="@layout/fragment_add_budget" />
 
-        <argument
-            android:name="budgetId"
-            android:defaultValue="-1L"
-            app:argType="long" />
+    <!-- Pantalla de Ahorros -->
+    <fragment
+        android:id="@+id/savingsFragment"
+        android:name="com.finanzapp.ui.fragments.SavingsFragment"
+        android:label="Ahorros"
+        tools:layout="@layout/fragment_savings">
+        <action
+            android:id="@+id/action_savingsFragment_to_addSavingGoalFragment"
+            app:destination="@id/addSavingGoalFragment" />
     </fragment>
 
+    <!-- Pantalla para Añadir Meta de Ahorro -->
+    <fragment
+        android:id="@+id/addSavingGoalFragment"
+        android:name="com.finanzapp.ui.fragments.AddSavingGoalFragment"
+        android:label="Añadir Meta de Ahorro"
+        tools:layout="@layout/fragment_add_saving_goal" />
+
+    <!-- Pantalla de Estadísticas -->
+    <fragment
+        android:id="@+id/statsFragment"
+        android:name="com.finanzapp.ui.fragments.StatsFragment"
+        android:label="Estadísticas"
+        tools:layout="@layout/fragment_stats">
+        <action
+            android:id="@+id/action_statsFragment_to_premiumFragment"
+            app:destination="@id/premiumFragment" />
+    </fragment>
+
+    <!-- Pantalla de Suscripción Premium -->
     <fragment
         android:id="@+id/premiumFragment"
         android:name="com.finanzapp.ui.fragments.PremiumFragment"
-        android:label="Premium" />
+        android:label="Premium"
+        tools:layout="@layout/fragment_premium" />
+
+    <!-- Fragmento de Política de Privacidad -->
+    <fragment
+        android:id="@+id/privacyPolicyFragment"
+        android:name="com.finanzapp.ui.fragments.PrivacyPolicyFragment"
+        android:label="Política de Privacidad"
+        tools:layout="@layout/privacy_policy" />
+
 </navigation>
