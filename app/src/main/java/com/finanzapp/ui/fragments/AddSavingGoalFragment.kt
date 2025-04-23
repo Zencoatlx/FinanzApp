@@ -17,6 +17,7 @@ import com.finanzapp.ui.viewmodel.SavingGoalViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -124,7 +125,10 @@ class AddSavingGoalFragment : Fragment() {
 
         // Guardar meta y procesar gamificación
         CoroutineScope(Dispatchers.Main).launch {
-            val goalId = viewModel.insert(savingGoal)
+            // Modificado para usar withContext y capturar el ID correctamente
+            val goalId = withContext(Dispatchers.IO) {
+                viewModel.insert(savingGoal)
+            }
 
             // Si se estableció un monto inicial, registrarlo para la gamificación
             if (initialAmount > 0) {

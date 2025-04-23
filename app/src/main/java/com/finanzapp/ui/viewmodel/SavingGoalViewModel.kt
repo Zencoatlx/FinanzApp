@@ -21,8 +21,9 @@ class SavingGoalViewModel(application: Application) : AndroidViewModel(applicati
         allSavingGoals = repository.allSavingGoals
     }
 
-    fun insert(savingGoal: SavingGoal) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insert(savingGoal)
+    // Modificamos este método para que sea suspend y devuelva el ID
+    suspend fun insert(savingGoal: SavingGoal): Long = withContext(Dispatchers.IO) {
+        return@withContext repository.insert(savingGoal)
     }
 
     fun update(savingGoal: SavingGoal) = viewModelScope.launch(Dispatchers.IO) {
