@@ -65,4 +65,7 @@ dependencies {
 
     // Biblioteca Google Play Billing
     implementation("com.android.billingclient:billing-ktx:6.0.1")
+
+    // Para animaciones Lottie (efectos visuales)
+    implementation("com.airbnb.android:lottie:6.0.0")
 }

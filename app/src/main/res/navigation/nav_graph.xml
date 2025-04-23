@@ -92,6 +92,20 @@
         <action
             android:id="@+id/action_savingsFragment_to_addSavingGoalFragment"
             app:destination="@id/addSavingGoalFragment" />
+        <action
+            android:id="@+id/action_savingsFragment_to_savingsChallengesFragment"
+            app:destination="@id/savingsChallengesFragment" />
+    </fragment>
+
+    <!-- Nueva Pantalla: Desafíos y Gamificación de Ahorros -->
+    <fragment
+        android:id="@+id/savingsChallengesFragment"
+        android:name="com.finanzapp.ui.fragments.SavingsChallengesFragment"
+        android:label="Finanz Hero"
+        tools:layout="@layout/fragment_savings_challenges">
+        <action
+            android:id="@+id/action_savingsChallengesFragment_to_addSavingGoalFragment"
+            app:destination="@id/addSavingGoalFragment" />
     </fragment>
 
     <!-- Pantalla para Añadir Meta de Ahorro -->

@@ -131,6 +131,27 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="savingsChallengesFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_savingsChallengesFragment_to_addSavingGoalFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="savingsFragment">
                     <value>
                       <LayoutPositions>
@@ -143,6 +164,11 @@
                         <option name="myPositions">
                           <map>
                             <entry key="action_savingsFragment_to_addSavingGoalFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_savingsFragment_to_savingsChallengesFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
